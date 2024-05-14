@@ -63,10 +63,6 @@ const Index = () => {
                 <Tr>
                   <Th>Task Name</Th>
                   <Th>Due Date</Th>
-                  <Th>Priority</Th>
-                  <Th>Status</Th>
-                  <Th>Assigned To</Th>
-                  <Th>Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -79,26 +75,7 @@ const Index = () => {
                       <Input type="date" value={task.dueDate} onChange={(e) => handleTaskChange(index, "dueDate", e.target.value)} />
                     </Td>
                     <Td>
-                      <Select value={task.priority} onChange={(e) => handleTaskChange(index, "priority", e.target.value)}>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                      </Select>
-                    </Td>
-                    <Td>
-                      <Select value={task.status} onChange={(e) => handleTaskChange(index, "status", e.target.value)}>
-                        <option value="Pending">Pending</option>
-                        <option value="Completed">Completed</option>
-                      </Select>
-                    </Td>
-                    <Td>
-                      <Input value={task.assignedTo} onChange={(e) => handleTaskChange(index, "assignedTo", e.target.value)} />
-                    </Td>
-                    <Td>
-                      <HStack spacing={2}>
-                        <IconButton aria-label="Edit" icon={<FaEdit />} onClick={() => setEditingTaskIndex(index)} />
-                        <IconButton aria-label="Delete" icon={<FaTrash />} onClick={() => handleDeleteTask(index)} />
-                      </HStack>
+                      <IconButton aria-label="Delete" icon={<FaTrash />} onClick={() => handleDeleteTask(index)} />
                     </Td>
                   </Tr>
                 ))}
@@ -118,9 +95,6 @@ const Index = () => {
                   <Th>Project Name</Th>
                   <Th>Start Date</Th>
                   <Th>End Date</Th>
-                  <Th>Status</Th>
-                  <Th>Owner</Th>
-                  <Th>Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -136,20 +110,7 @@ const Index = () => {
                       <Input type="date" value={project.endDate} onChange={(e) => handleProjectChange(index, "endDate", e.target.value)} />
                     </Td>
                     <Td>
-                      <Select value={project.status} onChange={(e) => handleProjectChange(index, "status", e.target.value)}>
-                        <option value="Ongoing">Ongoing</option>
-                        <option value="Planned">Planned</option>
-                        <option value="Completed">Completed</option>
-                      </Select>
-                    </Td>
-                    <Td>
-                      <Input value={project.owner} onChange={(e) => handleProjectChange(index, "owner", e.target.value)} />
-                    </Td>
-                    <Td>
-                      <HStack spacing={2}>
-                        <IconButton aria-label="Edit" icon={<FaEdit />} onClick={() => setEditingProjectIndex(index)} />
-                        <IconButton aria-label="Delete" icon={<FaTrash />} onClick={() => handleDeleteProject(index)} />
-                      </HStack>
+                      <IconButton aria-label="Delete" icon={<FaTrash />} onClick={() => handleDeleteProject(index)} />
                     </Td>
                   </Tr>
                 ))}
