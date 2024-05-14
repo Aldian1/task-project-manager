@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, Select, HStack, VStack, Box } from "@chakra-ui/react";
+import SpeechRecorder from "../components/SpeechRecorder";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const initialTasks = [
@@ -124,6 +125,7 @@ const Index = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      <SpeechRecorder />
     </Container>
   );
 };
