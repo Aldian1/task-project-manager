@@ -87,6 +87,7 @@ const Index = () => {
             setTasks([...tasks, { taskName, dueDate: "", priority: "", status: "", assignedTo: "" }]);
           }
         }
+        setApiResponse("");
       } catch (error) {
         console.error("Error uploading audio file:", error);
       }
@@ -125,6 +126,7 @@ const Index = () => {
             setTasks([...tasks, { taskName, dueDate: "", priority: "", status: "", assignedTo: "" }]);
           }
         }
+        setApiResponse("");
       } catch (error) {
         console.error("Error uploading audio file:", error);
       }
