@@ -121,12 +121,6 @@ const Index = () => {
           <p>{apiResponse}</p>
         </Box>
       )}
-      {apiResponse && (
-        <Box mt={4} p={4} borderWidth="1px" borderRadius="md">
-          <strong>Transcription Result:</strong>
-          <p>{apiResponse}</p>
-        </Box>
-      )}
       <Tabs>
         <TabList>
           <Tab>Tasks</Tab>
