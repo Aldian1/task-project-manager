@@ -59,16 +59,27 @@ const Index = () => {
     mediaRecorderRef.current.ondataavailable = (event) => {
       audioChunksRef.current.push(event.data);
     };
-    mediaRecorderRef.current.onstop = () => {
+    mediaRecorderRef.current.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = audioUrl;
-      a.download = "recording.wav";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(audioUrl);
+      const fileInput = document.getElementById("audioFileInput");
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(new File([audioBlob], "recording.wav"));
+      fileInput.files = dataTransfer.files;
+
+      const formData = new FormData();
+      formData.append("file", audioBlob, "recording.wav");
+
+      try {
+        const response = await fetch("https://qiadkr.buildship.run/", {
+          method: "POST",
+          body: formData,
+          mode: "no-cors",
+        });
+        const result = await response.text();
+        setApiResponse(result);
+      } catch (error) {
+        console.error("Error uploading audio file:", error);
+      }
     };
     mediaRecorderRef.current.start();
     setIsRecording(true);
@@ -108,6 +119,9 @@ const Index = () => {
 
   return (
     <Container maxW="container.xl" py={4}>
+      <form id="audioUploadForm">
+        <input type="file" id="audioFileInput" name="file" style={{ display: "none" }} />
+      </form>
       <HStack spacing={4} mb={4}>
         <Button onClick={isRecording ? handleStopRecording : handleStartRecording} leftIcon={isRecording ? <FaStop /> : <FaMicrophone />}>
           {isRecording ? "Stop Recording" : "Start Recording"}
