@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Container, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, Select, HStack, VStack, Box, Button } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import { FaPlus, FaEdit, FaTrash, FaMicrophone, FaStop } from "react-icons/fa";
 
 const initialTasks = [
@@ -163,7 +164,7 @@ const Index = () => {
               </Thead>
               <Tbody>
                 {tasks.map((task, index) => (
-                  <Tr key={index}>
+                  <motion.tr key={index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <Td>
                       <Input value={task.taskName} onChange={(e) => handleTaskChange(index, "taskName", e.target.value)} />
                     </Td>
@@ -173,7 +174,7 @@ const Index = () => {
                     <Td>
                       <IconButton aria-label="Delete" icon={<FaTrash />} onClick={() => handleDeleteTask(index)} />
                     </Td>
-                  </Tr>
+                  </motion.tr>
                 ))}
                 <Tr>
                   <Td colSpan={6} textAlign="center">
