@@ -154,6 +154,7 @@ const Index = () => {
         <TabList>
           <Tab>Tasks</Tab>
           <Tab>Projects</Tab>
+          <Tab>Charts</Tab>
         </TabList>
 
         <TabPanels>
