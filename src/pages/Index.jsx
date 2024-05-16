@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Container, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, Select, HStack, VStack, Box } from "@chakra-ui/react";
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import React, { useState, useRef } from "react";
+import { Container, Tabs, TabList, TabPanels, Tab, TabPanel, Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, Select, HStack, VStack, Box, Button } from "@chakra-ui/react";
+import { FaPlus, FaEdit, FaTrash, FaMicrophone, FaStop } from "react-icons/fa";
 
 const initialTasks = [
   { taskName: "Task 1", dueDate: "2023-10-01", priority: "High", status: "Pending", assignedTo: "John Doe" },
@@ -48,8 +48,43 @@ const Index = () => {
     setProjects(newProjects);
   };
 
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
+  const handleStartRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream);
+    mediaRecorderRef.current.ondataavailable = (event) => {
+      audioChunksRef.current.push(event.data);
+    };
+    mediaRecorderRef.current.onstop = () => {
+      const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = audioUrl;
+      a.download = "recording.wav";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(audioUrl);
+    };
+    mediaRecorderRef.current.start();
+    setIsRecording(true);
+  };
+
+  const handleStopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setIsRecording(false);
+  };
+
   return (
     <Container maxW="container.xl" py={4}>
+      <HStack spacing={4} mb={4}>
+        <Button onClick={isRecording ? handleStopRecording : handleStartRecording} leftIcon={isRecording ? <FaStop /> : <FaMicrophone />}>
+          {isRecording ? "Stop Recording" : "Start Recording"}
+        </Button>
+      </HStack>
       <Tabs>
         <TabList>
           <Tab>Tasks</Tab>
