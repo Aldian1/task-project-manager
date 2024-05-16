@@ -91,14 +91,10 @@ const Index = () => {
 
     mediaRecorderRef.current.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = audioUrl;
-      a.download = "recording.wav";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(audioUrl);
+      const fileInput = document.getElementById("audioFileInput");
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(new File([audioBlob], "recording.wav"));
+      fileInput.files = dataTransfer.files;
 
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
