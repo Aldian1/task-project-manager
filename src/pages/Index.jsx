@@ -96,6 +96,7 @@ const Index = () => {
         const response = await fetch("https://buildship.app/p/buildship-qiadkr/workflow/n846DFtPK5fYJfW1CXK2", {
           method: "POST",
           body: formData,
+          mode: "no-cors",
         });
         const result = await response.text();
         setApiResponse(result);
