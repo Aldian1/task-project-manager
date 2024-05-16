@@ -59,7 +59,7 @@ const Index = () => {
     mediaRecorderRef.current.ondataavailable = (event) => {
       audioChunksRef.current.push(event.data);
     };
-    mediaRecorderRef.current.onstop = () => {
+    mediaRecorderRef.current.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
       const fileInput = document.getElementById("audioFileInput");
       const dataTransfer = new DataTransfer();
@@ -69,13 +69,25 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      fetch("https://qiadkr.buildship.run/transcribe", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.text())
-        .then((result) => setApiResponse(result))
-        .catch((error) => console.error("Error uploading audio file:", error));
+      try {
+        const response = await fetch("https://qiadkr.buildship.run/transcribe", {
+          method: "POST",
+          body: formData,
+        });
+        const result = await response.text();
+        setApiResponse(result);
+
+        const newTaskKeyword = "new task";
+        const newTaskIndex = result.toLowerCase().indexOf(newTaskKeyword);
+        if (newTaskIndex !== -1) {
+          const taskName = result.slice(newTaskIndex + newTaskKeyword.length).trim();
+          if (taskName) {
+            setTasks([...tasks, { taskName, dueDate: "", priority: "", status: "", assignedTo: "" }]);
+          }
+        }
+      } catch (error) {
+        console.error("Error uploading audio file:", error);
+      }
     };
     mediaRecorderRef.current.start();
     setIsRecording(true);
@@ -85,7 +97,7 @@ const Index = () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
 
-    mediaRecorderRef.current.onstop = () => {
+    mediaRecorderRef.current.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
       const fileInput = document.getElementById("audioFileInput");
       const dataTransfer = new DataTransfer();
@@ -95,13 +107,25 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      fetch("https://qiadkr.buildship.run/transcribe", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.text())
-        .then((result) => setApiResponse(result))
-        .catch((error) => console.error("Error uploading audio file:", error));
+      try {
+        const response = await fetch("https://qiadkr.buildship.run/transcribe", {
+          method: "POST",
+          body: formData,
+        });
+        const result = await response.text();
+        setApiResponse(result);
+
+        const newTaskKeyword = "new task";
+        const newTaskIndex = result.toLowerCase().indexOf(newTaskKeyword);
+        if (newTaskIndex !== -1) {
+          const taskName = result.slice(newTaskIndex + newTaskKeyword.length).trim();
+          if (taskName) {
+            setTasks([...tasks, { taskName, dueDate: "", priority: "", status: "", assignedTo: "" }]);
+          }
+        }
+      } catch (error) {
+        console.error("Error uploading audio file:", error);
+      }
     };
   };
 
