@@ -17,6 +17,7 @@ const Index = () => {
   const [projects, setProjects] = useState(initialProjects);
   const [editingTaskIndex, setEditingTaskIndex] = useState(null);
   const [editingProjectIndex, setEditingProjectIndex] = useState(null);
+  const [apiResponse, setApiResponse] = useState("");
 
   const handleAddTask = () => {
     setTasks([...tasks, { taskName: "", dueDate: "", priority: "", status: "", assignedTo: "" }]);
@@ -73,9 +74,35 @@ const Index = () => {
     setIsRecording(true);
   };
 
-  const handleStopRecording = () => {
+  const handleStopRecording = async () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
+
+    mediaRecorderRef.current.onstop = async () => {
+      const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = audioUrl;
+      a.download = "recording.wav";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(audioUrl);
+
+      const formData = new FormData();
+      formData.append("file", audioBlob, "recording.wav");
+
+      try {
+        const response = await fetch("https://buildship.app/p/buildship-qiadkr/workflow/n846DFtPK5fYJfW1CXK2", {
+          method: "POST",
+          body: formData,
+        });
+        const result = await response.text();
+        setApiResponse(result);
+      } catch (error) {
+        console.error("Error uploading audio file:", error);
+      }
+    };
   };
 
   return (
@@ -85,6 +112,18 @@ const Index = () => {
           {isRecording ? "Stop Recording" : "Start Recording"}
         </Button>
       </HStack>
+      {apiResponse && (
+        <Box mt={4} p={4} borderWidth="1px" borderRadius="md">
+          <strong>Transcription Result:</strong>
+          <p>{apiResponse}</p>
+        </Box>
+      )}
+      {apiResponse && (
+        <Box mt={4} p={4} borderWidth="1px" borderRadius="md">
+          <strong>Transcription Result:</strong>
+          <p>{apiResponse}</p>
+        </Box>
+      )}
       <Tabs>
         <TabList>
           <Tab>Tasks</Tab>
