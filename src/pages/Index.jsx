@@ -54,6 +54,7 @@ const Index = () => {
   const audioChunksRef = useRef([]);
 
   const handleStartRecording = async () => {
+    setApiResponse("");
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorderRef.current = new MediaRecorder(stream);
     mediaRecorderRef.current.ondataavailable = (event) => {
