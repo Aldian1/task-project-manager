@@ -69,7 +69,7 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      fetch("https://qiadkr.buildship.run/", {
+      fetch("https://qiadkr.buildship.run/transcribe", {
         method: "POST",
         body: formData,
       })
@@ -95,7 +95,7 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      fetch("https://qiadkr.buildship.run/", {
+      fetch("https://qiadkr.buildship.run/transcribe", {
         method: "POST",
         body: formData,
       })
