@@ -59,7 +59,7 @@ const Index = () => {
     mediaRecorderRef.current.ondataavailable = (event) => {
       audioChunksRef.current.push(event.data);
     };
-    mediaRecorderRef.current.onstop = async () => {
+    mediaRecorderRef.current.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
       const fileInput = document.getElementById("audioFileInput");
       const dataTransfer = new DataTransfer();
@@ -69,17 +69,13 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      try {
-        const response = await fetch("https://qiadkr.buildship.run/", {
-          method: "POST",
-          body: formData,
-          mode: "no-cors",
-        });
-        const result = await response.text();
-        setApiResponse(result);
-      } catch (error) {
-        console.error("Error uploading audio file:", error);
-      }
+      fetch("https://qiadkr.buildship.run/", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.text())
+        .then((result) => setApiResponse(result))
+        .catch((error) => console.error("Error uploading audio file:", error));
     };
     mediaRecorderRef.current.start();
     setIsRecording(true);
@@ -89,7 +85,7 @@ const Index = () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
 
-    mediaRecorderRef.current.onstop = async () => {
+    mediaRecorderRef.current.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
       const fileInput = document.getElementById("audioFileInput");
       const dataTransfer = new DataTransfer();
@@ -99,17 +95,13 @@ const Index = () => {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      try {
-        const response = await fetch("https://qiadkr.buildship.run/", {
-          method: "POST",
-          body: formData,
-          mode: "no-cors",
-        });
-        const result = await response.text();
-        setApiResponse(result);
-      } catch (error) {
-        console.error("Error uploading audio file:", error);
-      }
+      fetch("https://qiadkr.buildship.run/", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.text())
+        .then((result) => setApiResponse(result))
+        .catch((error) => console.error("Error uploading audio file:", error));
     };
   };
 
